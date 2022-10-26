@@ -1,0 +1,26 @@
+.header{
+    width: 50%;
+    background-color: grey;
+    height: 100vh;
+    position: relative;
+    @include rp(765px) {
+        width: 100%;
+        flex-direction: column;
+        height: 30vh;
+    }
+    h1{
+        text-align: center;
+        color: white;
+        font-size: 56px;
+    }
+    &-title{
+        position: absolute;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+        @include rp(765px) {
+            justify-content: flex-start;
+        }
+    }
+}

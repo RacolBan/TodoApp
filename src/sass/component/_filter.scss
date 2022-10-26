@@ -1,0 +1,60 @@
+.filter{
+  border-bottom: 1px solid black;
+  width: 100%;
+  padding-bottom: 5px;
+  position: relative;
+  display: flex;
+  @include rp (450px) {
+    flex-direction: column;
+    height: 4em;
+  }
+  &-radio{
+    width: 20em;
+    @include rp (450px) {
+      justify-content: space-around;
+    }
+    &-label{
+      display: inline-block;
+      outline: none;
+      border-left: 1px solid #003cc9;
+      border-right: 1px solid #003cc9;
+      border-radius: 5px;
+      margin: 0 3px 0 3px;
+    }
+    &-input {
+      opacity: 0;
+      outline: none;
+      position: absolute;
+    }
+
+    &-status {
+      padding:0 15px;
+      display: inline;
+      cursor: pointer;
+      }
+    &-status:hover {
+        background-color: rgb(117, 11, 100);
+    }
+  }
+  &-taskstatus {
+    margin-left: 50px;
+    padding-left: 20px;
+    width: 12rem;
+    position: absolute;
+    right: 50px;
+    @include rp( 500px ) {
+      right: 10px;
+      padding-left: 0;
+      width: 23em;
+    }
+    @include rp(450px) {
+      position: static;
+      text-align: end;
+      margin-top: 10px;
+    }
+    &-span {
+      font-size: 16px;
+      font-weight: 400;
+    }
+  }
+}

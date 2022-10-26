@@ -1,0 +1,9 @@
+.todo {
+    height: 100vh;
+    width: 100%;
+    &-container {
+        @include rp(765px) {
+            flex-direction: column;
+        }
+    }
+}

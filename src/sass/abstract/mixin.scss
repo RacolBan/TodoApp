@@ -1,0 +1,5 @@
+@mixin rp($width) {
+  @media (max-width: $width) {
+      @content
+  }
+}
