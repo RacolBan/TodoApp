@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { ITask } from '../../Interface/interface';
 import { FaPenSquare, FaTrash } from 'react-icons/fa';
 
@@ -14,17 +14,15 @@ interface Props {
   handleToggleItem: (task: ITask) => void
   setToggleEditModal: React.Dispatch<React.SetStateAction<boolean>>
   setIdTask: React.Dispatch<React.SetStateAction<string>>
-
+  loading: boolean
+  newArr: ITask[]
 }
 export default function TodoItem (props: Props): JSX.Element {
-  const { curItem, isCompleted, curId, content, deadlineTime, deadlineHour, deadline, setIdTask, handleDeleteItem, handleToggleItem, setToggleEditModal } = props;
+  const { curItem, isCompleted, curId, content, deadlineTime, deadlineHour, deadline, loading, newArr, setIdTask, handleDeleteItem, handleToggleItem, setToggleEditModal } = props;
   const oneHourMilisecond = 60 * 60 * 1000;
   const dateNow: number = new Date().getTime();
   const timeToEvent: number = new Date(deadline).getTime();
-  const [time] = useState<number>(() => {
-    const tg = timeToEvent - dateNow;
-    return tg;
-  });
+  const time = timeToEvent - dateNow;
   const handleEdit = (): void => {
     setToggleEditModal(true);
     setIdTask(curId);
@@ -38,21 +36,30 @@ export default function TodoItem (props: Props): JSX.Element {
   }, []);
   return (
     <li className="content-area flexRow">
-      <div className="content-area-task">{ content }</div>
-      <div className="content-area-time">{ deadlineTime } &nbsp; { deadlineHour }</div>
-      <div className="content-area-action flexRow">
-        <input
-        type='checkbox'
-        onChange={ () => handleToggleItem(curItem)}
-        checked={isCompleted}
-        />
-        <span onClick={ () => handleDeleteItem(curId) }>
-          <FaTrash />
-        </span>
-        <span onClick={ () => handleEdit() }>
-          <FaPenSquare />
-        </span>
-      </div>
+      { !loading && newArr.length === 0
+        ? <span> You don&rsquo;t have any task </span>
+        : ''
+      }
+      { loading && newArr.length === 0
+        ? <span>...Loading</span>
+        : <div>
+            <div className="content-area-task">{ content }</div>
+            <div className="content-area-time">{ deadlineTime } &nbsp; { deadlineHour }</div>
+            <div className="content-area-action flexRow">
+              <input
+              type='checkbox'
+              onChange={ () => handleToggleItem(curItem)}
+              checked={isCompleted}
+              />
+              <span onClick={ () => handleDeleteItem(curId) }>
+                <FaTrash />
+              </span>
+              <span onClick={ () => handleEdit() }>
+                <FaPenSquare />
+              </span>
+            </div>
+          </div>
+      }
     </li>
   );
 }

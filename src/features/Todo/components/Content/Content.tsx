@@ -16,9 +16,11 @@ export default function Content (): JSX.Element {
   const [filter, setFilter] = useState<string>('');
   const [newArrTaskInStatus, setNewArrTaskInStatus] = useState<ITask[]>([]);
   const [idTask, setIdTask] = useState<string>('0');
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect((): void => {
     const getTodos = async (): Promise<void> => {
       const data = await getTodosAPI();
+      setLoading(false);
       dispatch(getTask(data));
     };
     void getTodos();
@@ -57,15 +59,20 @@ export default function Content (): JSX.Element {
   return (
     <div className='content'>
       <h1 className='content-h1'>TODO LIST</h1>
-      <div className="content-filter">
+      <div className="content-h1-filter">
         <Filters tasks={tasks} arrTaskStatus={newArrTaskInStatus} setFilter={setFilter} />
         <ul>
-        {filter === 'Completed' || filter === 'Active'
-          ? newArrTaskInStatus.map((task) => {
+        { !loading && newArrTaskInStatus.length === 0
+          ? <span className='content-span'> You don&rsquo;t have any task </span>
+          : ''
+        }
+        { loading && newArrTaskInStatus.length === 0
+          ? <span className='content-loading'>...Loading</span>
+          : newArrTaskInStatus.map((task) => {
             const newTime = new Date(task.deadline).toLocaleString().split(', ', 2);
             return (
             <TodoItem
-            key={ task.id }
+            key = { task.id }
             curItem= { task }
             curId = { task.id }
             content = {task.content}
@@ -77,29 +84,12 @@ export default function Content (): JSX.Element {
             handleToggleItem = { handleToggleItem }
             setToggleEditModal = { setToggleEditModal }
             setIdTask = { setIdTask }
+            loading = {loading}
+            newArr = {newArrTaskInStatus}
             />
             );
           })
-          : tasks.map((task) => {
-            const newTime = new Date(task.deadline).toLocaleString().split(', ', 2);
-            return (
-              <TodoItem
-              key={ task.id }
-              curItem= { task }
-              curId = { task.id }
-              content = {task.content}
-              isCompleted = { task.isCompleted }
-              deadline = { task.deadline }
-              deadlineTime = { newTime[1] }
-              deadlineHour = { newTime[0] }
-              handleDeleteItem = { handleDeleteItem }
-              handleToggleItem = { handleToggleItem }
-              setIdTask = { setIdTask }
-              setToggleEditModal = { setToggleEditModal }
-              />
-            );
-          })
-          }
+        }
         </ul>
           { toggleEditModal
             ? tasks.map(task => {
